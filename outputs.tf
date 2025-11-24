@@ -10,7 +10,7 @@ output "container_app_environment_id" {
 
 output "serving_app_fqdn" {
   description = "Externally reachable FQDN that exposes the ACME webroot."
-  value       = azurerm_container_app.serving_app.latest_revision_fqdn
+  value       = "${azurerm_container_app.serving_app.name}.${azurerm_container_app_environment.acme_env.default_domain}"
 }
 
 output "renewer_job_id" {
