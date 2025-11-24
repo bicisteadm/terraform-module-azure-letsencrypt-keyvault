@@ -1,18 +1,15 @@
 locals {
-  prefix_slug = lower(substr(var.name_prefix, 0, 12))
   tags = merge({
     component = "acme-kv"
   }, var.tags)
 
   domains_csv = join(",", var.domains)
-}
 
-locals {
-  storage_account_name = lower(substr(replace("${local.prefix_slug}st", "/[^a-z0-9]/", ""), 0, 24))
-  resource_group_name  = var.resource_group_name != null ? var.resource_group_name : "${local.prefix_slug}-rg"
-  cae_name             = "${local.prefix_slug}-cae"
-  serving_app_name     = "${local.prefix_slug}-serving-ca"
-  renewer_job_name     = "${local.prefix_slug}-renewer-ca"
+  storage_account_name = lower(substr(replace("${var.name_prefix}st", "/[^a-z0-9]/", ""), 0, 24))
+  resource_group_name  = var.resource_group_name != null ? var.resource_group_name : "${var.name_prefix}-rg"
+  cae_name             = "${var.name_prefix}-cae"
+  serving_app_name     = "${var.name_prefix}-serving-ca"
+  renewer_job_name     = "${var.name_prefix}-renewer-ca"
 }
 
 resource "azurerm_resource_group" "acme_rg" {
