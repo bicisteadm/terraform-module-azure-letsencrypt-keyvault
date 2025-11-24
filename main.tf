@@ -1,5 +1,5 @@
 locals {
-  prefix_slug = substr(regexreplace(lower(var.name_prefix), "[^a-z0-9]", ""), 0, 12)
+  prefix_slug = lower(substr(replace(var.name_prefix, "/[^a-zA-Z0-9]/", ""), 0, 12))
   tags = merge({
     component = "acme-kv"
   }, var.tags)
@@ -16,20 +16,11 @@ resource "random_string" "storage" {
 }
 
 locals {
-  storage_account_name = substr(
-    format(
-      "%svault%s",
-      local.prefix_slug,
-      random_string.storage.result
-    ),
-    0,
-    24
-  )
-
-  resource_group_name = coalesce(var.resource_group_name, format("%s-rg", local.prefix_slug))
-  cae_name            = format("%s-cae", local.prefix_slug)
-  serving_app_name    = format("%s-serving-ca", local.prefix_slug)
-  renewer_job_name    = format("%s-renewer-ca", local.prefix_slug)
+  storage_account_name = lower(substr("${local.prefix_slug}st${random_string.storage.result}", 0, 24))
+  resource_group_name  = var.resource_group_name != null ? var.resource_group_name : "${local.prefix_slug}-rg"
+  cae_name             = "${local.prefix_slug}-cae"
+  serving_app_name     = "${local.prefix_slug}-serving-ca"
+  renewer_job_name     = "${local.prefix_slug}-renewer-ca"
 }
 
 resource "azurerm_resource_group" "acme_rg" {
