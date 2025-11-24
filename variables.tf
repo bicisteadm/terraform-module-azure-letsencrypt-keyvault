@@ -55,13 +55,13 @@ variable "log_to_file" {
 variable "serving_image" {
   description = "Container image that exposes the ACME HTTP-01 challenge endpoint."
   type        = string
-  default     = "docker.io/bicisteadm/acme-kv-serving:0.0.4-dev"
+  default     = "docker.io/bicisteadm/acme-kv-serving:1.0.0"
 }
 
 variable "renewer_image" {
   description = "Container image responsible for issuing and renewing certificates."
   type        = string
-  default     = "docker.io/bicisteadm/acme-kv-renewer:0.0.4-dev"
+  default     = "docker.io/bicisteadm/acme-kv-renewer:1.0.0"
 }
 
 variable "pfx_password" {
