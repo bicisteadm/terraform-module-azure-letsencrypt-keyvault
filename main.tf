@@ -1,5 +1,5 @@
 locals {
-  prefix_slug = lower(substr(replace(var.name_prefix, "/[^a-zA-Z0-9]/", ""), 0, 12))
+  prefix_slug = lower(substr(var.name_prefix, 0, 12))
   tags = merge({
     component = "acme-kv"
   }, var.tags)
@@ -7,16 +7,8 @@ locals {
   domains_csv = join(",", var.domains)
 }
 
-resource "random_string" "storage" {
-  length  = 4
-  lower   = true
-  upper   = false
-  numeric = true
-  special = false
-}
-
 locals {
-  storage_account_name = lower(substr("${local.prefix_slug}st${random_string.storage.result}", 0, 24))
+  storage_account_name = lower(substr("${local.prefix_slug}st", 0, 24))
   resource_group_name  = var.resource_group_name != null ? var.resource_group_name : "${local.prefix_slug}-rg"
   cae_name             = "${local.prefix_slug}-cae"
   serving_app_name     = "${local.prefix_slug}-serving-ca"
