@@ -197,40 +197,6 @@ resource "azurerm_application_gateway" "main" {
 }
 ```
 
-#### Azure Front Door Example
-
-Create a route to forward ACME challenge requests:
-
-```hcl
-resource "azurerm_cdn_frontdoor_route" "acme_challenge" {
-  name                          = "acme-challenge"
-  cdn_frontdoor_endpoint_id     = azurerm_cdn_frontdoor_endpoint.main.id
-  cdn_frontdoor_origin_group_id = azurerm_cdn_frontdoor_origin_group.acme.id
-  
-  patterns_to_match = ["/.well-known/acme-challenge/*"]
-  supported_protocols = ["Http", "Https"]
-  
-  forwarding_protocol = "HttpOnly"
-  https_redirect_enabled = false
-}
-```
-
-#### DNS-Based Routing
-
-Alternatively, create a DNS CNAME record pointing `*.yourdomain.com` or specific subdomains to the serving app FQDN for challenge validation.
-
-### Storage Access
-
-- Azure Files access uses storage account keys injected by Terraform
-- Keys are stored in Container Apps Environment storage definitions
-- Rotate keys through Terraform if needed
-
-### Certificate Renewal
-
-- The module only provisions infrastructure; you need to trigger the job manually or via automation
-- Consider using Azure Logic Apps, Event Grid, or scheduled pipelines for automatic renewal
-- Let's Encrypt certificates expire after 90 days; renew every 60-75 days
-
 ## License
 
 MIT
