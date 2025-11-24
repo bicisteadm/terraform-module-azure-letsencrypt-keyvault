@@ -64,6 +64,12 @@ variable "renewer_image" {
   default     = "docker.io/bicisteadm/acme-kv-renewer:1.0.0"
 }
 
+variable "renewal_schedule" {
+  description = "Cron expression for automatic certificate renewal. Default: monthly on 1st at 2 AM. Set to null for manual trigger only."
+  type        = string
+  default     = "0 2 1 * *"
+}
+
 variable "pfx_password" {
   description = "Password that protects generated PFX bundles before upload to Azure Key Vault."
   type        = string

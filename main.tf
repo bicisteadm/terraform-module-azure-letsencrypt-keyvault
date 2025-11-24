@@ -8,7 +8,7 @@ locals {
 }
 
 locals {
-  storage_account_name = lower(substr("${local.prefix_slug}st", 0, 24))
+  storage_account_name = lower(substr(replace("${local.prefix_slug}st", "/[^a-z0-9]/", ""), 0, 24))
   resource_group_name  = var.resource_group_name != null ? var.resource_group_name : "${local.prefix_slug}-rg"
   cae_name             = "${local.prefix_slug}-cae"
   serving_app_name     = "${local.prefix_slug}-serving-ca"
@@ -37,19 +37,19 @@ resource "azurerm_storage_account" "acme_storage" {
 resource "azurerm_storage_share" "state_share" {
   name               = "acme-storage"
   storage_account_id = azurerm_storage_account.acme_storage.id
-  quota              = 100
+  quota              = 1
 }
 
 resource "azurerm_storage_share" "webroot_share" {
   name               = "acme-webroot"
   storage_account_id = azurerm_storage_account.acme_storage.id
-  quota              = 50
+  quota              = 1
 }
 
 resource "azurerm_storage_share" "logs_share" {
   name               = "acme-logs"
   storage_account_id = azurerm_storage_account.acme_storage.id
-  quota              = 50
+  quota              = 1
 }
 
 resource "azurerm_container_app_environment" "acme_env" {
@@ -141,9 +141,21 @@ resource "azurerm_container_app_job" "renewer_job" {
   replica_timeout_in_seconds   = 1800
   tags                         = local.tags
 
-  manual_trigger_config {
-    parallelism              = 1
-    replica_completion_count = 1
+  dynamic "schedule_trigger_config" {
+    for_each = var.renewal_schedule != null ? [1] : []
+    content {
+      cron_expression          = var.renewal_schedule
+      parallelism              = 1
+      replica_completion_count = 1
+    }
+  }
+
+  dynamic "manual_trigger_config" {
+    for_each = var.renewal_schedule == null ? [1] : []
+    content {
+      parallelism              = 1
+      replica_completion_count = 1
+    }
   }
 
   identity {
