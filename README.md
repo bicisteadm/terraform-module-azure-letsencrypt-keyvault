@@ -110,6 +110,10 @@ Or schedule it with Azure Logic Apps, Event Grid, or cron jobs.
 | log_to_file | When true, ACME containers persist logs to Azure File share | `bool` | `true` | no |
 | serving_image | Container image that exposes the ACME HTTP-01 challenge endpoint | `string` | `"docker.io/bicisteadm/acme-kv-serving:0.0.4-dev"` | no |
 | renewer_image | Container image responsible for issuing and renewing certificates | `string` | `"docker.io/bicisteadm/acme-kv-renewer:0.0.4-dev"` | no |
+| renewal_schedule | Cron expression for automatic certificate renewal (null = manual only) | `string` | `"0 2 1 * *"` | no |
+| storage_share_quota_state | Storage quota in GB for acme.sh state share | `number` | `1` | no |
+| storage_share_quota_webroot | Storage quota in GB for webroot share (HTTP-01 challenges) | `number` | `1` | no |
+| storage_share_quota_logs | Storage quota in GB for logs share | `number` | `1` | no |
 | container_apps_subnet_id | Optional resource ID of a delegated subnet for Container Apps Environment | `string` | `null` | no |
 | log_analytics_workspace_id | Optional Log Analytics workspace ID for Container Apps diagnostics | `string` | `null` | no |
 | tags | Additional tags applied to every resource created by the module | `map(string)` | `{}` | no |

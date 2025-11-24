@@ -37,19 +37,19 @@ resource "azurerm_storage_account" "acme_storage" {
 resource "azurerm_storage_share" "state_share" {
   name               = "acme-storage"
   storage_account_id = azurerm_storage_account.acme_storage.id
-  quota              = 1
+  quota              = var.storage_share_quota_state
 }
 
 resource "azurerm_storage_share" "webroot_share" {
   name               = "acme-webroot"
   storage_account_id = azurerm_storage_account.acme_storage.id
-  quota              = 1
+  quota              = var.storage_share_quota_webroot
 }
 
 resource "azurerm_storage_share" "logs_share" {
   name               = "acme-logs"
   storage_account_id = azurerm_storage_account.acme_storage.id
-  quota              = 1
+  quota              = var.storage_share_quota_logs
 }
 
 resource "azurerm_container_app_environment" "acme_env" {

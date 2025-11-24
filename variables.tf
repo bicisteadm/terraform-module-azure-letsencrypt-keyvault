@@ -70,6 +70,24 @@ variable "renewal_schedule" {
   default     = "0 2 1 * *"
 }
 
+variable "storage_share_quota_state" {
+  description = "Storage quota in GB for acme.sh state share."
+  type        = number
+  default     = 1
+}
+
+variable "storage_share_quota_webroot" {
+  description = "Storage quota in GB for webroot share (HTTP-01 challenges)."
+  type        = number
+  default     = 1
+}
+
+variable "storage_share_quota_logs" {
+  description = "Storage quota in GB for logs share."
+  type        = number
+  default     = 1
+}
+
 variable "pfx_password" {
   description = "Password that protects generated PFX bundles before upload to Azure Key Vault."
   type        = string
